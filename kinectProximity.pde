@@ -101,9 +101,11 @@ void draw() {
 					     "\nL hand x: " + int(leftHand.x) +
 					     "\nL hand y: " + int(leftHand.y) +
 					     "\nL hand z:" + int(leftHand.z), 20, 40);
-
+          
+          oscmsg = oscontrol.getMessage();
 					if (oscmsg != null) {
 						if (oscmsg.checkAddrPattern("/wii/1/button/A") && oscmsg.get(0).floatValue() == 1.0) {
+              settings.logger.log("Point Added.");
 							Point point = new Point((int)rightHand.x, (int)rightHand.y, (int)rightHand.z, setupPoint, 200);
 							points.add(point);
 							setupPoint += 1;

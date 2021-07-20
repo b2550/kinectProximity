@@ -1,11 +1,15 @@
 public class OSControl {
     boolean handshook = false;
+    OscMessage message;
 
     public void route(OscMessage message) {
+        this.message = message;
         String address = message.addrPattern();
+        settings.logger.logf("[osc recieve] %s", address);
         switch(address) {
             case "/handshake":
                 handshakeSubtask();
+                break;
         }
     }
 
@@ -18,20 +22,24 @@ public class OSControl {
 
     public void handshakeSubtask() {
         settings.logger.log(" [handshake] Success");
-        handshook = true;
+        this.handshook = true;
         delay(1000*5);
-        handshook = false;
+        this.handshook = false;
         settings.logger.log(" [handshake] Auto-checking Connection...");
         handshakeSend();
     }
 
     public void send(String address, int ... values) {
-        settings.logger.log(" [osc] send: " + address);
+        //settings.logger.log(" [osc] send: " + address);
         OscMessage message = new OscMessage(address);
         for(int value : values) {
             message.add(value);
         }
         osc.send(message, remote);
+    }
+    
+    public OscMessage getMessage() {
+      return this.message;
     }
 }
 
